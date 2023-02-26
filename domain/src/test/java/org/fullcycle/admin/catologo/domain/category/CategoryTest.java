@@ -1,6 +1,8 @@
 package org.fullcycle.admin.catologo.domain.category;
 
 import org.fullcycle.admin.catologo.domain.category.Category;
+import org.fullcycle.admin.catologo.domain.category.exceptions.DomainException;
+import org.fullcycle.admin.catologo.domain.validation.handler.ThowsValidationHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +28,7 @@ public class CategoryTest {
 
     @Test
     public void givenAnInvalidNullName_whenCallNewCategoryAndValidate_themShouldReceiveError() {
-        final var expectedName = null;
+        final String expectedName = null;
         final var expectedErrorCount = 1;
         final var expectedErrorMessage = "'name' should be not null";
         final var expectedDescription = "A vategoria mais assistida";
@@ -34,9 +36,9 @@ public class CategoryTest {
 
         final var  actualCategory = Category.newCategory(expectedName, expectedDescription, expectedIsActive);
 
-        final var actualException =  Assertions.assertThrows(DomainException.class, () ->actualCategory.validate());
-
-        Assertions.assertEquals(expectedErrorMessage,actualException.getErrors().size());
-        Assertions.assertEquals(expectedErrorMessage,actualException.getErrors().get(0).getMessage());
+        final var actualException =  Assertions.assertThrows(DomainException.class, () -> actualCategory.validate(new ThowsValidationHandler()));
+        System.out.println();
+         Assertions.assertEquals(expectedErrorCount,actualException.getErrors().size());
+         Assertions.assertEquals(expectedErrorMessage,actualException.getErrors().get(0).message());
     }
 }
